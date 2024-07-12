@@ -3,5 +3,4 @@ __pycache__
 # Ignore the virtual environment directory
 venv/
 idea/
-
-
+.gitignore
