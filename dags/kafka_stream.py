@@ -8,22 +8,22 @@ from scripts.user import users_stream_data
 
 default_args = {
     'owner': 'airscholar',
-    'start_date': datetime(2024, 7, 11, 20, 00)
+    'start_date': datetime(2024, 7, 9, 20, 00)
 }
 
 with DAG('user_automation',
          default_args=default_args,
-         schedule_interval='@hourly',
+         schedule_interval='@daily',
          catchup=False) as dag:
-
-    user_task = PythonOperator(
-        task_id='stream_data_from_api',
-        python_callable=users_stream_data
-    )
+    #
+    # user_task = PythonOperator(
+    #     task_id='stream_data_from_api',
+    #     python_callable=users_stream_data
+    # )
 
     weather_task = PythonOperator(
         task_id='weather_stream',
         python_callable=live_weather
     )
 
-[user_task, weather_task]
+# [weather_task, user_task]

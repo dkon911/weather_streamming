@@ -11,8 +11,9 @@ from cassandra.cluster import Cluster
 import logging
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, filename='fetch_weather.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 
 def data_filter(weather_data):
     location_data = {
@@ -70,6 +71,7 @@ def data_filter(weather_data):
             forecast_data.append({**location_data, **day_data, **hour_data})
     return forecast_data
 
+
 def generate_date_range(start_date, end_date):
     dates = []
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
@@ -80,33 +82,17 @@ def generate_date_range(start_date, end_date):
         start_date += delta
     return dates
 
-def generate_date_range_even_years(start_year, end_year):
-    dates = []
-    for year in range(start_year, end_year + 1, 2):  # Step by 2 to get even years
-        start_date = datetime(year, 1, 1)
-        end_date = datetime(year, 12, 31)
-        delta = timedelta(days=1)
-        while start_date <= end_date:
-            dates.append(start_date.strftime("%Y-%m-%d"))
-            start_date += delta
-    return dates
 
-# Fetch historical data asynchronously
 async def fetch_hist_data_async():
     API_key = '97f79db0d866429c807170012240906'
-    # start_date = '2024-07-06'
     start_date = '2024-07-09'
-    end_date = '2024-07-09'
-
-    # start_year = 2010
-    # end_year = 2010
+    end_date = '2024-07-11'
     cities = [
         {"name": "Hanoi", "lat": "21.0285", "lon": "105.8542"},
         # {"name": "Da Nang", "lat": "16.0471", "lon": "108.2068"},
         # {"name": "Ho Chi Minh City", "lat": "10.8231", "lon": "106.6297"},
     ]
     dates = generate_date_range(start_date, end_date)
-    # dates = generate_date_range_even_years(start_year, end_year)
     all_data = []
 
     semaphore = asyncio.Semaphore(10)  # Limit the number of concurrent requests
@@ -118,7 +104,10 @@ async def fetch_hist_data_async():
                 url = f'https://api.weatherapi.com/v1/history.json?key={API_key}&q={city["lat"]},{city["lon"]}&dt={date}'
                 tasks.append(fetch_data(session, url, city["name"], date, semaphore))
         all_data = await asyncio.gather(*tasks)
+        # all_data = all_data[0]
+        logger.info(f"Data fetched for dates: {dates}")
     return all_data
+
 
 async def fetch_data(session, url, city_name, date, semaphore):
     async with semaphore:
@@ -131,112 +120,30 @@ async def fetch_data(session, url, city_name, date, semaphore):
                 logger.error(f"Failed to retrieve data for {city_name} on {date}: {res.status} - {res.text}")
                 return None
 
-def load_to_cast(df):
-    spark = SparkSession.builder \
-        .appName("WeatherDataToCassandra") \
-        .config('spark.jars.packages', 'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0') \
-        .getOrCreate()
-
-    data = data_filter(df)
-    # Convert the forecast data to a Spark DataFrame
-    df = spark.createDataFrame(data)
-    # Write DataFrame to Cassandra
-    df.write \
-        .format("org.apache.spark.sql.cassandra") \
-        .mode('append') \
-        .options(table="checkup", keyspace="weather") \
-        .save()
-    return logger.info("Importing data to Cassandra")
-
-# Create keyspace and table in Cassandra
-def create_keyspace_and_table():
-    cluster = Cluster(['localhost'])
-    session = cluster.connect()
-
-    session.execute("""
-        CREATE KEYSPACE IF NOT EXISTS weather
-        WITH REPLICATION = {
-            'class' : 'SimpleStrategy',
-            'replication_factor' : 1
-        }
-    """)
-
-    session.execute("""
-        CREATE TABLE IF NOT EXISTS weather.checkup (
-            id UUID PRIMARY KEY,
-            name TEXT,
-            region TEXT,
-            country TEXT,
-            lat DOUBLE,
-            lon DOUBLE,
-            tz_id  TEXT,
-            localtime TEXT,
-            localtime_epoch BIGINT,
-            date TEXT,
-            date_epoch BIGINT,
-            maxtemp_c DOUBLE,
-            mintemp_c DOUBLE,
-            avgtemp_c DOUBLE,
-            maxwind_kph DOUBLE,
-            totalprecip_mm DOUBLE,
-            totalsnow_cm DOUBLE,
-            avghumidity DOUBLE,
-            daily_will_it_rain INT,
-            daily_chance_of_rain INT,
-            daily_will_it_snow INT,
-            daily_chance_of_snow INT,
-            condition_text TEXT,
-            condition_icon TEXT,
-            condition_code INT,
-            uv DOUBLE,
-            time TEXT,
-            temp_c DOUBLE,
-            is_day INT,
-            wind_kph DOUBLE,
-            wind_degree INT,
-            pressure_mb DOUBLE,
-            pressure_in DOUBLE,
-            precip_mm DOUBLE,
-            precip_in DOUBLE,
-            snow_cm DOUBLE,
-            humidity INT,
-            cloud INT,
-            feelslike_c DOUBLE,
-            hour_uv DOUBLE
-        )
-    """)
-    logger.info("Keyspace and table created successfully")
-
 
 def live_weather():
     from kafka import KafkaProducer
     import json
-    producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
+
+    # producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
     try:
-        res = asyncio.run(fetch_hist_data_async())
-        response_data = res[0]
-        # response_data = data_filter(response_data)
-        # print(json.dumps(response_data, indent=4))
-        producer.send('weather', json.dumps(response_data).encode('utf-8'))
+        historical_data = asyncio.run(fetch_hist_data_async())
+        for weather_data in historical_data:
+            if weather_data is None:
+                logger.error(f"Data is empty on {weather_data['forecast']['forecastday']['date']}")
+                continue
+            format_data = data_filter(weather_data)
+            print(json.dumps(format_data))
+            # producer.send('weather', json.dumps(format_data[0]).encode('utf-8'))
+            logger.info(f"-> Data for {weather_data['location']['name']} written to Cassandra successfully")
+
+
 
     except Exception as e:
         print(f'WEATHER TOPIC ERROR: {e}')
         logging.error(f'An error occurred: {e}')
 
 
-
-def main():
-    create_keyspace_and_table()
-    historical_data = asyncio.run(fetch_hist_data_async())
-    for weather_data in historical_data:
-        if weather_data is None:
-            logger.error(f"Data is empty on {weather_data['forecast']['forecastday']['date']}")
-            continue
-        load_to_cast(weather_data)
-        logger.info(f"-> Data for {weather_data['location']['name']} written to Cassandra successfully")
-
-
 if __name__ == "__main__":
-    # main()
     live_weather()
     logger.info("JOB DONE")
