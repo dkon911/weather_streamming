@@ -5,7 +5,7 @@ findspark.init()
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
-from pyspark.sql.types import StructType, StructField, StringType, FloatType, IntegerType, BooleanType
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, LongType, DoubleType
 
 
 def create_keyspace(session):
@@ -129,76 +129,19 @@ def create_spark_connection():
 
     return s_conn
 
-def weather_filter(weather_data):
-    location_data = {
-        "name": weather_data["location"]["name"],
-        "region": weather_data["location"]["region"],
-        "country": weather_data["location"]["country"],
-        "lat": weather_data["location"]["lat"],
-        "lon": weather_data["location"]["lon"],
-        "tz_id": weather_data["location"]["tz_id"],
-        "localtime": weather_data["location"]["localtime"],
-        "localtime_epoch": weather_data["location"]["localtime_epoch"]
-    }
-    forecast_data = []
-    for forecast in weather_data["forecast"]["forecastday"]:
-        day_data = {
-            "date": forecast["date"],
-            "date_epoch": forecast["date_epoch"],
-            "maxtemp_c": float(forecast["day"]["maxtemp_c"]),
-            "mintemp_c": float(forecast["day"]["mintemp_c"]),
-            "avgtemp_c": float(forecast["day"]["avgtemp_c"]),
-            "maxwind_kph": float(forecast["day"]["maxwind_kph"]),
-            "totalprecip_mm": float(forecast["day"]["totalprecip_mm"]),
-            "totalsnow_cm": float(forecast["day"]["totalsnow_cm"]),
-            "avghumidity": float(forecast["day"]["avghumidity"]),
-            "daily_will_it_rain": forecast["day"]["daily_will_it_rain"],
-            "daily_chance_of_rain": forecast["day"]["daily_chance_of_rain"],
-            "daily_will_it_snow": forecast["day"]["daily_will_it_snow"],
-            "daily_chance_of_snow": forecast["day"]["daily_chance_of_snow"],
-            "condition_text": forecast["day"]["condition"]["text"],
-            "condition_icon": forecast["day"]["condition"]["icon"],
-            "condition_code": forecast["day"]["condition"]["code"],
-            "uv": float(forecast["day"]["uv"])
-        }
-        for hour in forecast["hour"]:
-            hour_data = {
-                "id": str(uuid.uuid4()),  # Generate a unique UUID for each record
-                "time": hour["time"],
-                "temp_c": float(hour["temp_c"]),
-                "is_day": hour["is_day"],
-                "condition_text": hour["condition"]["text"],
-                "condition_icon": hour["condition"]["icon"],
-                "condition_code": hour["condition"]["code"],
-                "wind_kph": float(hour["wind_kph"]),
-                "wind_degree": hour["wind_degree"],
-                "pressure_mb": float(hour["pressure_mb"]),
-                "pressure_in": float(hour["pressure_in"]),
-                "precip_mm": float(hour["precip_mm"]),
-                "precip_in": float(hour["precip_in"]),
-                "snow_cm": float(hour["snow_cm"]),
-                "humidity": hour["humidity"],
-                "cloud": hour["cloud"],
-                "feelslike_c": float(hour["feelslike_c"]),
-                "hour_uv": float(hour["uv"])  # Avoid conflict with the daily "uv" field
-            }
-            forecast_data.append({**location_data, **day_data, **hour_data})
-    return forecast_data
-
 def connect_to_kafka(spark_conn):
     spark_df = None
     try:
         spark_df = spark_conn.readStream \
             .format('kafka') \
             .option('kafka.bootstrap.servers', 'localhost:9092') \
-            .option('subscribe', 'users_created') \
+            .option('subscribe', 'weather') \
             .option('startingOffsets', 'earliest') \
             .option('failOnDataLoss', 'false') \
             .load()
         logging.info("kafka dataframe created successfully")
     except Exception as e:
         logging.warning(f"kafka dataframe could not be created because: {e}")
-    print("___________________________________________________________________")
     return spark_df
 
 
@@ -236,15 +179,59 @@ def create_users_df_from_kafka(spark_df):
 
     return users_df
 
+
 def create_weather_df_from_kafka(spark_df):
-    schema = StructType([
-        StructField("location", StringType()),
-        StructField("forecast", StringType())
+    # Define the schema matching the weather data structure
+    weather_schema = StructType([
+        StructField("id", StringType(), False),
+        StructField("name", StringType()),
+        StructField("region", StringType()),
+        StructField("country", StringType()),
+        StructField("lat", DoubleType()),
+        StructField("lon", DoubleType()),
+        StructField("tz_id", StringType()),
+        StructField("localtime", StringType()),
+        StructField("localtime_epoch", LongType()),
+        StructField("date", StringType()),
+        StructField("date_epoch", LongType()),
+        StructField("maxtemp_c", DoubleType()),
+        StructField("mintemp_c", DoubleType()),
+        StructField("avgtemp_c", DoubleType()),
+        StructField("maxwind_kph", DoubleType()),
+        StructField("totalprecip_mm", DoubleType()),
+        StructField("totalsnow_cm", DoubleType()),
+        StructField("avghumidity", DoubleType()),
+        StructField("daily_will_it_rain", IntegerType()),
+        StructField("daily_chance_of_rain", IntegerType()),
+        StructField("daily_will_it_snow", IntegerType()),
+        StructField("daily_chance_of_snow", IntegerType()),
+        StructField("condition_text", StringType()),
+        StructField("condition_icon", StringType()),
+        StructField("condition_code", IntegerType()),
+        StructField("uv", DoubleType()),
+        StructField("time", StringType()),
+        StructField("temp_c", DoubleType()),
+        StructField("is_day", IntegerType()),
+        StructField("wind_kph", DoubleType()),
+        StructField("wind_degree", IntegerType()),
+        StructField("pressure_mb", DoubleType()),
+        StructField("pressure_in", DoubleType()),
+        StructField("precip_mm", DoubleType()),
+        StructField("precip_in", DoubleType()),
+        StructField("snow_cm", DoubleType()),
+        StructField("humidity", IntegerType()),
+        StructField("cloud", IntegerType()),
+        StructField("feelslike_c", DoubleType()),
+        StructField("hour_uv", DoubleType())
     ])
 
-    weather_df = spark_df.selectExpr("CAST(value AS STRING)", "topic").where("topic = 'weather'") \
-        .select(from_json(col('value'), schema).alias('data')).select("data.*")
-    print(weather_df)
+    # Parse the JSON and create the DataFrame
+    weather_df = (spark_df
+                  .selectExpr("CAST(value AS STRING)", "topic")
+                  .where("topic = 'weather'")
+                  .select(from_json(col('value'), weather_schema).alias('data'))
+                  .select("data.*")
+                  .filter(col('id').isNotNull()))  # Filter out null IDs
 
     return weather_df
 
@@ -257,8 +244,8 @@ if __name__ == "__main__":
     if spark_conn is not None:
         # connect to kafka with spark connection
         spark_df = connect_to_kafka(spark_conn)
-        users_df = create_users_df_from_kafka(spark_df)
-        # weather_df = create_weather_df_from_kafka(spark_df)
+        # users_df = create_users_df_from_kafka(spark_df)
+        weather_df = create_weather_df_from_kafka(spark_df)
 
         session = create_cassandra_connection()
 
@@ -268,17 +255,17 @@ if __name__ == "__main__":
 
             logging.info("Streaming is being started...")
 
-            streaming_users_query = (users_df.writeStream.format("org.apache.spark.sql.cassandra")
-                               .option('checkpointLocation', '/tmp/checkpoint')
-                               .option('keyspace', 'spark_streams')
-                               .option('table', 'created_users')
-                               .start())
+            # streaming_users_query = (users_df.writeStream.format("org.apache.spark.sql.cassandra")
+            #                    .option('checkpointLocation', '/tmp/checkpoint')
+            #                    .option('keyspace', 'spark_streams')
+            #                    .option('table', 'created_users')
+            #                    .start())
 
-            # streaming_weather_query = (weather_df.writeStream.format("org.apache.spark.sql.cassandra")
-            #                          .option('checkpointLocation', '/tmp/weather_checkpoint
-            #                          .option('keyspace', 'spark_streams')
-            #                          .option('table', 'weather')
-            #                          .start())
+            streaming_weather_query = (weather_df.writeStream.format("org.apache.spark.sql.cassandra")
+                                     .option('checkpointLocation', '/tmp/weather_checkpoint')
+                                     .option('keyspace', 'spark_streams')
+                                     .option('table', 'weather')
+                                     .start())
 
-            streaming_users_query.awaitTermination()
-            # streaming_weather_query.awaitTermination()
+            # streaming_users_query.awaitTermination()
+            streaming_weather_query.awaitTermination()

@@ -5,6 +5,9 @@ from airflow.operators.python import PythonOperator
 from scripts.weather import live_weather
 from scripts.user import users_stream_data
 
+def call_live_weather():
+    # This function will call live_weather with the specified arguments
+    live_weather(start_date='2024-07-13', end_date='2024-07-14')
 
 default_args = {
     'owner': 'airscholar',
@@ -23,7 +26,7 @@ with DAG('user_automation',
 
     weather_task = PythonOperator(
         task_id='weather_stream',
-        python_callable=live_weather
+        python_callable=call_live_weather
     )
 
 # [weather_task, user_task]

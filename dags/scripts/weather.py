@@ -4,14 +4,12 @@
 import aiohttp
 import asyncio
 from datetime import datetime, timedelta
-from pyspark.sql import SparkSession
-# from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, LongType
+
 import uuid
-from cassandra.cluster import Cluster
 import logging
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, filename='fetch_weather.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -83,14 +81,14 @@ def generate_date_range(start_date, end_date):
     return dates
 
 
-async def fetch_hist_data_async():
+async def fetch_hist_data_async(start_date: str, end_date: str):
     API_key = '97f79db0d866429c807170012240906'
-    start_date = '2024-07-09'
-    end_date = '2024-07-11'
+    # start_date = '2024-07-09'
+    # end_date = '2024-07-11'
     cities = [
         {"name": "Hanoi", "lat": "21.0285", "lon": "105.8542"},
-        # {"name": "Da Nang", "lat": "16.0471", "lon": "108.2068"},
-        # {"name": "Ho Chi Minh City", "lat": "10.8231", "lon": "106.6297"},
+        {"name": "Da Nang", "lat": "16.0471", "lon": "108.2068"},
+        {"name": "Ho Chi Minh City", "lat": "10.8231", "lon": "106.6297"},
     ]
     dates = generate_date_range(start_date, end_date)
     all_data = []
@@ -121,23 +119,22 @@ async def fetch_data(session, url, city_name, date, semaphore):
                 return None
 
 
-def live_weather():
+def live_weather(start_date, end_date):
     from kafka import KafkaProducer
     import json
 
-    # producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
+    producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
     try:
-        historical_data = asyncio.run(fetch_hist_data_async())
+        historical_data = asyncio.run(fetch_hist_data_async(start_date, end_date))
         for weather_data in historical_data:
             if weather_data is None:
                 logger.error(f"Data is empty on {weather_data['forecast']['forecastday']['date']}")
                 continue
             format_data = data_filter(weather_data)
-            print(json.dumps(format_data))
-            # producer.send('weather', json.dumps(format_data[0]).encode('utf-8'))
+            # print(json.dumps(format_data))
+            for data in range(len(format_data)):
+                producer.send('weather', json.dumps(format_data[data]).encode('utf-8'))
             logger.info(f"-> Data for {weather_data['location']['name']} written to Cassandra successfully")
-
-
 
     except Exception as e:
         print(f'WEATHER TOPIC ERROR: {e}')
