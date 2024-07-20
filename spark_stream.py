@@ -16,6 +16,7 @@ def create_keyspace(session):
 
     print("Keyspace created successfully!")
 
+
 def create_table(session):
     # TABLE: spark_streams.created_users
     session.execute("""
@@ -82,35 +83,6 @@ def create_table(session):
     print("Table created successfully!")
 
 
-def insert_data(session, **kwargs):
-    print("inserting data...")
-
-    user_id = kwargs.get('id')
-    first_name = kwargs.get('first_name')
-    last_name = kwargs.get('last_name')
-    gender = kwargs.get('gender')
-    address = kwargs.get('address')
-    postcode = kwargs.get('post_code')
-    email = kwargs.get('email')
-    username = kwargs.get('username')
-    dob = kwargs.get('dob')
-    registered_date = kwargs.get('registered_date')
-    phone = kwargs.get('phone')
-    picture = kwargs.get('picture')
-
-    try:
-        session.execute("""
-            INSERT INTO spark_streams.created_users(id, first_name, last_name, gender, address, 
-                post_code, email, username, dob, registered_date, phone, picture)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (user_id, first_name, last_name, gender, address,
-              postcode, email, username, dob, registered_date, phone, picture))
-        logging.info(f"Data inserted for {first_name} {last_name}")
-
-    except Exception as e:
-        logging.error(f'could not insert data due to {e}')
-
-
 def create_spark_connection():
     s_conn = None
 
@@ -128,6 +100,7 @@ def create_spark_connection():
         logging.error(f"Couldn't create the spark session due to exception {e}")
 
     return s_conn
+
 
 def connect_to_kafka(spark_conn):
     spark_df = None
@@ -156,28 +129,6 @@ def create_cassandra_connection():
     except Exception as e:
         logging.error(f"Could not create cassandra connection due to {e}")
         return None
-
-
-def create_users_df_from_kafka(spark_df):
-    schema = StructType([
-        StructField("id", StringType(), False),
-        StructField("first_name", StringType(), False),
-        StructField("last_name", StringType(), False),
-        StructField("gender", StringType(), False),
-        StructField("address", StringType(), False),
-        StructField("post_code", StringType(), False),
-        StructField("email", StringType(), False),
-        StructField("username", StringType(), False),
-        StructField("registered_date", StringType(), False),
-        StructField("phone", StringType(), False),
-        StructField("picture", StringType(), False)
-    ])
-
-    users_df = spark_df.selectExpr("CAST(value AS STRING)", 'topic').where("topic = 'users_created'") \
-        .select(from_json(col('value'), schema).alias('data')).select("data.*")
-    print(users_df)
-
-    return users_df
 
 
 def create_weather_df_from_kafka(spark_df):
