@@ -17,10 +17,10 @@ The project is designed with the following components:
 
 - **Data Source**: We use three sources: Weather API from [weather API](https://www.weatherapi.com/)
 - **Apache Airflow**: Responsible for orchestrating the pipeline and storing fetched data in a PostgreSQL database.
-[//]: # (- **PostgreSQL**: Store metadata of Airflow)
+- **PostgreSQL**: Where the processed data will be stored
 - **Apache Kafka**: Used for streaming data from Cassandra to the processing engine.
 - **Apache Spark**: For data processing with its master and worker nodes.
-- **Cassandra**: Where the processed data will be stored.
+- **Cassandra**: Store metadata of Airflow.
 - **Docker**: Used to containerize the services.
 - **Grafana**: For visualization of the data.
 
@@ -33,7 +33,7 @@ The project is designed with the following components:
 - Apache Zookeeper
 - Apache Spark
 - Cassandra
-[//]: # (- PostgreSQL)
+- PostgreSQL
 - Docker
 
 
