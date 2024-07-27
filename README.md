@@ -17,10 +17,10 @@ The project is designed with the following components:
 
 - **Data Source**: I use source: Weather API from [weather API](https://www.weatherapi.com/)
 - **Apache Airflow**: Responsible for orchestrating the pipeline and storing fetched data in a PostgreSQL database.
-- **PostgreSQL**: Where the processed data will be stored
+- **PostgreSQL**: Store metadata of Airflow.
 - **Apache Kafka**: Used for streaming data from Cassandra to the processing engine.
 - **Apache Spark**: For data processing with its master and worker nodes.
-- **Cassandra**: Store metadata of Airflow.
+- **Cassandra**:  Where the processed data will be stored
 - **Docker**: Used to containerize the services.
 - **Grafana**: For visualization of the data.
 
@@ -51,14 +51,12 @@ The project is designed with the following components:
 3. Run spark-job 
 
     ```bash
-    spark-submit --master spark://localhost:7077 \
-    --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.1 \
-    com.datastax.spark:spark-cassandra-connector_2.12:3.5.0,\
-    org.apache.kafka:kafka-clients:3.5.1,\
-    org.apache.spark:spark-token-provider-kafka-0-10_2.12:3.5.1 spark_stream.py
+   spark-submit --master spark://localhost:7077 \
+   --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,\
+   org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 .\spark_stream.py
     ```
 
-    or if use already have spark in machine
+    or if already have spark in machine use:
 
     ```bash
     python spark_stream.py

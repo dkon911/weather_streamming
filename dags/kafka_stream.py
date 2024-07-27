@@ -11,10 +11,10 @@ def call_live_weather():
     start_date = end_date - timedelta(days=1)
 
     # Format dates as strings if required by live_weather
-    formatted_start_date = start_date.strftime('%Y-%m-%d')
+    yesterday = start_date.strftime('%Y-%m-%d')
     formatted_end_date = end_date.strftime('%Y-%m-%d')
 
-    live_weather(start_date=formatted_start_date, end_date=formatted_start_date)
+    live_weather(start_date=yesterday, end_date=yesterday)
 
 
 default_args = {
@@ -32,4 +32,4 @@ with DAG('user_automation',
         python_callable=call_live_weather
     )
 
-# weather_stream >> clean_data >> transform_data >> store_data
+# weather_task >> clean_data>> transform_data >> store_data

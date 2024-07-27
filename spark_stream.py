@@ -206,17 +206,10 @@ if __name__ == "__main__":
 
             logging.info("Streaming is being started...")
 
-            # streaming_users_query = (users_df.writeStream.format("org.apache.spark.sql.cassandra")
-            #                    .option('checkpointLocation', '/tmp/checkpoint')
-            #                    .option('keyspace', 'spark_streams')
-            #                    .option('table', 'created_users')
-            #                    .start())
-
-            streaming_weather_query = (weather_df.writeStream.format("org.apache.spark.sql.cassandra")
+            weather_data_stream = (weather_df.writeStream.format("org.apache.spark.sql.cassandra")
                                      .option('checkpointLocation', '/tmp/weather_checkpoint')
                                      .option('keyspace', 'spark_streams')
                                      .option('table', 'weather')
                                      .start())
 
-            # streaming_users_query.awaitTermination()
-            streaming_weather_query.awaitTermination()
+            weather_data_stream.awaitTermination()
