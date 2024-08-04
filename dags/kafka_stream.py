@@ -19,10 +19,10 @@ def call_live_weather():
 
 default_args = {
     'owner': 'airscholar',
-    'start_date': datetime(2024, 7, 22, 20, 00)
+    'start_date': datetime(2024, 8, 1, 20, 00)
 }
 
-with DAG('user_automation',
+with DAG('weather_automation',
          default_args=default_args,
          schedule_interval='@daily',
          catchup=False) as dag:

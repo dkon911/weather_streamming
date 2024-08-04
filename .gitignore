@@ -1,8 +1,8 @@
 __pycache__
 *.pyc
-# Ignore the virtual environment directory
+
 .idea
 venv/
-idea/
+.idea/
 .gitignore
-asd.py
+.asd.py

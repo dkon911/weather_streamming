@@ -11,7 +11,7 @@
 This project is about building an near real-time data pipeline. This project is focused on developing an application that can perform real-time analysis of the weather conditions
 ## System Architecture
 
-![System Architecture](images/architecture.png)
+![System Architecture](images/system_architecture.jpg)
 
 The project is designed with the following components:
 
@@ -43,17 +43,21 @@ The project is designed with the following components:
 
 1. Run Docker Compose to spin up the services:
     ```bash
-    docker-compose up
+    docker-compose up -d
     ```
 
-2. Access airflow webserver ui (http://localhost:8080/) to start the job 
+2. Access airflow webserver UI (http://localhost:8080/) to start the job 
+
 
 3. Run spark-job 
+  - `<spark-master container id>`: get it in docker
+  - `<spark master IP address>`: get it on the spark UI
 
     ```bash
-   spark-submit --master spark://localhost:7077 \
-   --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,\
-   org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 .\spark_stream.py
+      docker exec -it <spark-master container id>\
+      spark-submit --master spark://<spark master IP address>:7077 \
+      --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,\
+      org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 spark_stream.py
     ```
 
     or if already have spark in machine use:
