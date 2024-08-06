@@ -102,7 +102,6 @@ async def fetch_hist_data_async(start_date: str, end_date: str):
                 url = f'https://api.weatherapi.com/v1/history.json?key={API_key}&q={city["lat"]},{city["lon"]}&dt={date}'
                 tasks.append(fetch_data(session, url, city["name"], date, semaphore))
         all_data = await asyncio.gather(*tasks)
-        # all_data = all_data[0]
         logger.info(f"Data fetched for dates: {dates}")
     return all_data
 
