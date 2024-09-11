@@ -1,6 +1,8 @@
 # import findspark
 # findspark.init()
 
+from dotenv import load_dotenv
+import os
 import aiohttp
 import asyncio
 from datetime import datetime, timedelta
@@ -11,6 +13,8 @@ import logging
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+load_dotenv()
+
 
 
 def data_filter(weather_data):
@@ -82,7 +86,7 @@ def generate_date_range(start_date, end_date):
 
 
 async def fetch_hist_data_async(start_date: str, end_date: str):
-    API_key = '97f79db0d866429c807170012240906'
+    API_key = os.getenv('API_KEY')
     # start_date = '2024-07-09'
     # end_date = '2024-07-11'
     cities = [
@@ -133,7 +137,7 @@ def live_weather(start_date, end_date):
             # print(json.dumps(format_data))
             for data in range(len(format_data)):
                 producer.send('weather', json.dumps(format_data[data]).encode('utf-8'))
-            logger.info(f"-> Data for {weather_data['location']['name']} written to Cassandra successfully")
+            logger.info(f"-> Data for {weather_data['location']['name']} written to Kafka successfully")
 
     except Exception as e:
         print(f'WEATHER TOPIC ERROR: {e}')
