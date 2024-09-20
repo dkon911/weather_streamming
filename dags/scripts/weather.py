@@ -15,8 +15,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 load_dotenv()
 
-
-
 def data_filter(weather_data):
     location_data = {
         "name": weather_data["location"]["name"],
@@ -86,7 +84,7 @@ def generate_date_range(start_date, end_date):
 
 
 async def fetch_hist_data_async(start_date: str, end_date: str):
-    API_key = os.getenv('API_KEY')
+    API_key = os.getenv('API_key')
     # start_date = '2024-07-09'
     # end_date = '2024-07-11'
     cities = [

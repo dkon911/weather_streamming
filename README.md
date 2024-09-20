@@ -1,4 +1,4 @@
-# Realtime Data Streaming 
+# Realtime Data Streaming
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -45,10 +45,10 @@ The project is designed with the following components:
     docker-compose up -d
     ```
 
-2. Access airflow webserver UI (http://localhost:8080/) to start the job 
+2. Access airflow webserver UI (http://localhost:8080/) to start the job
 
 
-3. Run spark-job 
+3. Run spark-job
   - `<spark-master container id>`: get it in docker
   - `<spark master IP address>`: get it on the spark UI
 
@@ -64,14 +64,72 @@ The project is designed with the following components:
     ```bash
     python spark_stream.py
     ```
-    
+
   ## Data Overview
 
 ### Raw data from the Weather API looks like this:
 
-<b><span style="color:Aqua">
-NOT AVAILABLE
-</span></b>
+"location": {
+        "name": "Hanoi",
+        "region": "",
+        "country": "Vietnam",
+        "lat": 21.03,
+        "lon": 105.85,
+        "tz_id": "Asia/Bangkok",
+        "localtime_epoch": 1726065512,
+        "localtime": "2024-09-11 21:38"
+    },
+    "forecast": {
+        "forecastday": [
+            {
+                "date": "2024-09-11",
+                "date_epoch": 1726012800,
+                "day": {
+                    "maxtemp_c": 25.2,
+                    "mintemp_c": 23.6,
+                    "avgtemp_c": 24.3,
+                    "maxwind_kph": 19.4,
+                    "totalprecip_mm": 37.97,
+                    "totalsnow_cm": 0.0,
+                    "avghumidity": 95,
+                    "daily_will_it_rain": 1,
+                    "daily_chance_of_rain": 100,
+                    "daily_will_it_snow": 0,
+                    "daily_chance_of_snow": 0,
+                    "condition": {
+                        "text": "Light rain shower",
+                        "icon": "//cdn.weatherapi.com/weather/64x64/day/353.png",
+                        "code": 1240
+                    },
+                    "uv": 6.0
+                },
+                "hour": [
+                    {
+                        "time_epoch": 1725987600,
+                        "time": "2024-09-11 00:00",
+                        "temp_c": 24.1,
+                        "is_day": 0,
+                        "condition": {
+                            "text": "Light rain shower",
+                            "icon": "//cdn.weatherapi.com/weather/64x64/night/353.png",
+                            "code": 1240
+                        },
+                        "wind_kph": 7.9,
+                        "wind_degree": 3,
+                        "pressure_mb": 1007.0,
+                        "pressure_in": 29.73,
+                        "precip_mm": 1.14,
+                        "precip_in": 0.04,
+                        "snow_cm": 0.0,
+                        "humidity": 97,
+                        "cloud": 100,
+                        "feelslike_c": 26.9,
+                        "windchill_c": 24.1,
+                        "will_it_rain": 1,
+                        "chance_of_rain": 100,
+                        "vis_km": 10.0,
+                        "uv": 0.0
+                    },
 
 ### And here is the data schema after processing:
 
@@ -95,11 +153,11 @@ NOT AVAILABLE
     - totalprecip_mm: Total precipitation in mm
     - totalsnow_cm: Total snow in cm
     - avghumidity: Average humidity
-    - daily_will_it_rain: 
+    - daily_will_it_rain:
     - daily_chance_of_rain:
     - daily_will_it_snow:
     - daily_chance_of_snow:
-    - condition_text: 
+    - condition_text:
     - condition_icon:
     - condition_code:
     - uv: UV index of the day
@@ -109,7 +167,7 @@ NOT AVAILABLE
     - id: id of the record in UUID format
     - time: time in format yyyy-mm-dd hh:mm
     - temp_c: Temperature in celsius at that hour
-    - is_day: 
+    - is_day:
     - condition_text: The word description of the weather condition
     - condition_icon: The icon code of the weather condition
     - condition_code: The code of the weather condition
@@ -121,10 +179,44 @@ NOT AVAILABLE
     - precip_in:
     - snow_cm:
     - humidity:
-    - cloud:
+    - cloud: Cloud cover percentage
     - feelslike_c:
     - hour_uv: UV index per hour
 
- 
-
-
+REALTIME.json
+{
+    "location": {
+        "name": "Atba Village",
+        "region": "",
+        "country": "Vietnam",
+        "lat": 16.05,
+        "lon": 108.2,
+        "tz_id": "Asia/Ho_Chi_Minh",
+        "localtime_epoch": 1726673963,
+        "localtime": "2024-09-18 22:39"
+    },
+    "current": {
+        "last_updated_epoch": 1726673400,
+        "last_updated": "2024-09-18 22:30",
+        "temp_c": 25.2,
+        "is_day": 0,
+        "condition": {
+            "text": "Partly cloudy",
+            "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+            "code": 1003
+        },
+        "wind_kph": 14.4,
+        "wind_degree": 280,
+        "pressure_mb": 1001.0,
+        "precip_in": 0.06,
+        "humidity": 94,
+        "cloud": 75,
+        "feelslike_c": 28.5,
+        "windchill_c": 23.3,
+        "heatindex_c": 25.7,
+        "dewpoint_c": 22.4,
+        "vis_km": 10.0,
+        "uv": 1.0,
+        "gust_kph": 22.7
+    }
+}

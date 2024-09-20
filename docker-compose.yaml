@@ -15,6 +15,7 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
+      restart: always
       networks:
         - confluent
 
@@ -47,7 +48,7 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'false'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
-    restart: always
+    restart: on-failure
     networks:
       - confluent
     healthcheck:
@@ -118,6 +119,7 @@ services:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AIRFLOW_WEBSERVER_SECRET_KEY=this_is_a_very_secured_key
+      - API_key=${API_key}
     logging:
       options:
         max-size: 10m

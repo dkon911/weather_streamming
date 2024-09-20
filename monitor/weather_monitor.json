@@ -1,4 +1,53 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_HISTORICAL_WEA",
+      "label": "historical_wea",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "grafana-postgresql-datasource",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.4.2"
+    },
+    {
+      "type": "datasource",
+      "id": "grafana-postgresql-datasource",
+      "name": "PostgreSQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "state-timeline",
+      "name": "State timeline",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -18,7 +67,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 4,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -37,7 +86,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -102,7 +151,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -135,7 +184,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -231,7 +280,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -265,7 +314,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -299,7 +348,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "description": "",
       "fieldConfig": {
@@ -427,7 +476,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -460,7 +509,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -525,7 +574,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -558,7 +607,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -638,7 +687,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -670,7 +719,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -729,7 +778,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 8,
+        "w": 9,
         "x": 4,
         "y": 11
       },
@@ -751,7 +800,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -784,7 +833,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -844,7 +893,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -877,7 +926,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "adtdinebdko3ke"
+        "uid": "${DS_HISTORICAL_WEA}"
       },
       "fieldConfig": {
         "defaults": {
@@ -956,7 +1005,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "adtdinebdko3ke"
+            "uid": "${DS_HISTORICAL_WEA}"
           },
           "editorMode": "code",
           "format": "table",
@@ -984,6 +1033,332 @@
       ],
       "title": "Hourly UV",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_HISTORICAL_WEA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "lengthmm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 20
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_HISTORICAL_WEA}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT precip_mm \r\nFROM historical_weather\r\nWHERE NAME = $location AND date='$date'\r\n;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Precipitation in mm",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_HISTORICAL_WEA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 9,
+        "x": 4,
+        "y": 20
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_HISTORICAL_WEA}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT precip_mm, \"time\"\r\nFROM historical_weather\r\nWHERE NAME = $location AND date='$date'\r\n;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Panel Title",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_HISTORICAL_WEA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineWidth": 3,
+            "spanNulls": false
+          },
+          "displayName": "Condition in $location at $date",
+          "mappings": [
+            {
+              "options": {
+                "Cloudy": {
+                  "color": "#a9a9a9",
+                  "index": 6
+                },
+                "Light drizzle": {
+                  "color": "#ffc4de",
+                  "index": 2
+                },
+                "Light rain shower": {
+                  "color": "#add8e6",
+                  "index": 3
+                },
+                "Moderate or heavy rain shower": {
+                  "color": "#6969ff",
+                  "index": 7
+                },
+                "Partly cloudy": {
+                  "color": "#ffceeb",
+                  "index": 1
+                },
+                "Patchy light drizzle": {
+                  "color": "#bebebe",
+                  "index": 5
+                },
+                "Patchy light rain": {
+                  "color": "#b0e0e6",
+                  "index": 4
+                },
+                "Patchy rain possible": {
+                  "color": "#a9a9ff",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 12,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_HISTORICAL_WEA}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT condition_text, \"time\" \r\nFROM historical_weather\r\nWHERE NAME = $location AND date='$date'\r\n;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Condition in $location",
+      "transparent": true,
+      "type": "state-timeline"
     }
   ],
   "refresh": "",
@@ -993,30 +1368,19 @@
     "list": [
       {
         "allValue": "Hanoi",
-        "current": {
-          "selected": false,
-          "text": "Ho Chi Minh City",
-          "value": "Ho Chi Minh City"
-        },
+        "current": {},
         "datasource": {
-          "type": "hadesarchitect-cassandra-datasource",
-          "uid": "bdvk3loapmwowe"
+          "type": "grafana-postgresql-datasource",
+          "uid": "${DS_HISTORICAL_WEA}"
         },
-        "definition": "SELECT distinct name FROM distinct_names;",
-        "error": {
-          "data": {
-            "message": "Unexpected error"
-          }
-        },
+        "definition": "SELECT DISTINCT name FROM historical_weather;",
         "hide": 0,
         "includeAll": true,
         "label": "Location",
         "multi": false,
         "name": "location",
         "options": [],
-        "query": {
-          "query": "SELECT distinct name FROM distinct_names;"
-        },
+        "query": "SELECT DISTINCT name FROM historical_weather;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1026,8 +1390,8 @@
       {
         "current": {
           "selected": false,
-          "text": "2024-08-21",
-          "value": "2024-08-21"
+          "text": "2024-08-20",
+          "value": "2024-08-20"
         },
         "description": "date in format YYYY-mm-dd",
         "hide": 0,
@@ -1036,54 +1400,24 @@
         "options": [
           {
             "selected": true,
-            "text": "2024-08-21",
-            "value": "2024-08-21"
+            "text": "2024-08-20",
+            "value": "2024-08-20"
           }
         ],
-        "query": "2024-08-21",
+        "query": "2024-08-20",
         "skipUrlSync": false,
         "type": "textbox"
-      },
-      {
-        "current": {
-          "isNone": true,
-          "selected": true,
-          "text": "None",
-          "value": ""
-        },
-        "datasource": {
-          "type": "hadesarchitect-cassandra-datasource",
-          "uid": "bdvk3loapmwowe"
-        },
-        "definition": "SELECT time FROM weather WHERE date='$date' ALLOW FILTERING;",
-        "error": {
-          "data": {
-            "message": "Unexpected error"
-          }
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "TIme",
-        "multi": false,
-        "name": "time",
-        "options": [],
-        "query": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 3,
-        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-6h",
-    "to": "now"
+    "from": "2024-08-20T16:29:24.731Z",
+    "to": "2024-08-22T13:38:13.195Z"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Weather monitor",
   "uid": "bdvk3ti516zuod",
-  "version": 38,
+  "version": 45,
   "weekStart": ""
 }
