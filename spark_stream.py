@@ -1,7 +1,6 @@
 import logging
-# import findspark
-#
-# findspark.init()
+import findspark
+findspark.init()
 
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
@@ -32,48 +31,48 @@ def create_table(session):
     # TABLE: spark_streams.weather
     session.execute(
         """
-            CREATE TABLE IF NOT EXISTS spark_streams.historical_weather (
-                id UUID PRIMARY KEY,
-                name TEXT,
-                region TEXT,
-                country TEXT,
-                lat FLOAT,
-                lon FLOAT,
-                tz_id  TEXT,
-                localtime TEXT,
-                localtime_epoch BIGINT,
-                date TEXT,
-                date_epoch BIGINT,
-                maxtemp_c FLOAT,
-                mintemp_c FLOAT,
-                avgtemp_c FLOAT,
-                maxwind_kph FLOAT,
-                totalprecip_mm FLOAT,
-                totalsnow_cm FLOAT,
-                avghumidity FLOAT,
-                daily_will_it_rain INT,
-                daily_chance_of_rain INT,
-                daily_will_it_snow INT,
-                daily_chance_of_snow INT,
-                condition_text TEXT,
-                condition_icon TEXT,
-                condition_code INT,
-                uv FLOAT,
-                time TEXT,
-                temp_c FLOAT,
-                is_day INT,
-                wind_kph FLOAT,
-                wind_degree INT,
-                pressure_mb FLOAT,
-                pressure_in FLOAT,
-                precip_mm FLOAT,
-                precip_in FLOAT,
-                snow_cm FLOAT,
-                humidity INT,
-                cloud INT,
-                feelslike_c FLOAT,
-                hour_uv FLOAT
-            )
+        CREATE TABLE IF NOT EXISTS spark_streams.historical_weather (
+            id UUID,
+            name TEXT,
+            date TEXT,
+            time TEXT,
+            region TEXT,
+            country TEXT,
+            lat FLOAT,
+            lon FLOAT,
+            tz_id  TEXT,
+            localtime TEXT,
+            localtime_epoch BIGINT,
+            date_epoch BIGINT,
+            maxtemp_c FLOAT,
+            mintemp_c FLOAT,
+            avgtemp_c FLOAT,
+            maxwind_kph FLOAT,
+            totalprecip_mm FLOAT,
+            totalsnow_cm FLOAT,
+            avghumidity FLOAT,
+            daily_will_it_rain INT,
+            daily_chance_of_rain INT,
+            daily_will_it_snow INT,
+            daily_chance_of_snow INT,
+            condition_text TEXT,
+            condition_icon TEXT,
+            condition_code INT,
+            uv FLOAT,
+            temp_c FLOAT,
+            is_day INT,
+            wind_kph FLOAT,
+            wind_degree INT,
+            pressure_mb FLOAT,
+            pressure_in FLOAT,
+            precip_mm FLOAT,
+            precip_in FLOAT,
+            snow_cm FLOAT,
+            humidity INT,
+            cloud INT,
+            feelslike_c FLOAT,
+            hour_uv FLOAT,
+            PRIMARY KEY ((name, date), time));
         """
     )
 

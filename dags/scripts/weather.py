@@ -84,7 +84,8 @@ def generate_date_range(start_date, end_date):
 
 
 async def fetch_hist_data_async(start_date: str, end_date: str):
-    API_key = os.getenv('API_key')
+    # API_key = os.getenv('API_key')
+    API_key = '97f79db0d866429c807170012240906'
     # start_date = '2024-07-09'
     # end_date = '2024-07-11'
     cities = [
@@ -120,7 +121,7 @@ async def fetch_data(session, url, city_name, date, semaphore):
                 return None
 
 
-def live_weather(start_date, end_date):
+def historical_weather(start_date, end_date):
     from kafka import KafkaProducer
     import json
 
@@ -143,5 +144,5 @@ def live_weather(start_date, end_date):
 
 
 if __name__ == "__main__":
-    live_weather()
+    historical_weather('2024-09-20','2024-09-20')
     logger.info("JOB DONE")

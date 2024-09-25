@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from scripts.weather import live_weather
+from scripts.weather import historical_weather
 
 
 def call_live_weather():
@@ -14,17 +14,18 @@ def call_live_weather():
     yesterday = start_date.strftime('%Y-%m-%d')
     formatted_end_date = end_date.strftime('%Y-%m-%d')
 
-    live_weather(start_date=yesterday, end_date=yesterday)
+    historical_weather(start_date=yesterday, end_date=yesterday)
 
 
 default_args = {
     'owner': 'airscholar',
-    'start_date': datetime(2024, 8, 1, 20, 00)
+    'start_date': datetime(2024, 8, 1, 20, 00),
+    'timezone': 'Asia/Ho_Chi_Minh'
 }
 
 with DAG('weather_automation',
          default_args=default_args,
-         schedule_interval='@daily',
+         schedule_interval='15 0 * * *',
          catchup=False) as dag:
 
     weather_task = PythonOperator(
