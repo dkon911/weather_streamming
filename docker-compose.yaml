@@ -207,8 +207,6 @@ services:
     networks:
       - confluent
 
-
-      # Add Prometheus service
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -222,7 +220,6 @@ services:
     networks:
       - confluent
 
-  # Add Node Exporter service for system metrics
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter
