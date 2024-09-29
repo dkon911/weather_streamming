@@ -206,5 +206,31 @@ services:
       - CASSANDRA_PASSWORD=cassandra
     networks:
       - confluent
+
+
+      # Add Prometheus service
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitor/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
+    networks:
+      - confluent
+
+  # Add Node Exporter service for system metrics
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    restart: always
+    networks:
+      - confluent
+
 networks:
   confluent:
