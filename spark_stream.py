@@ -28,7 +28,7 @@ def create_keyspace(session):
 
 def create_table(session):
 
-    # TABLE: spark_streams.weather
+    # TABLE: spark_streams.historical_weather
     session.execute(
         """
         CREATE TABLE IF NOT EXISTS spark_streams.historical_weather (
@@ -199,7 +199,6 @@ if __name__ == "__main__":
     if spark_conn is not None:
         # connect to kafka with spark connection
         spark_df = connect_to_kafka(spark_conn)
-        # users_df = create_users_df_from_kafka(spark_df)
         weather_df = create_weather_df_from_kafka(spark_df)
 
         session = create_cassandra_connection()
@@ -209,7 +208,7 @@ if __name__ == "__main__":
             create_table(session)
 
             logging.info("Streaming is being started...")
-
+            print("Streaming is being started...")
             weather_data_stream = (
                 weather_df.writeStream.format("org.apache.spark.sql.cassandra")
                 .option("checkpointLocation", "/tmp/weather_checkpoint")

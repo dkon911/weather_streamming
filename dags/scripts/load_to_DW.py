@@ -10,7 +10,7 @@ spark = SparkSession.builder \
 
 cassandra_df = spark.read \
     .format("org.apache.spark.sql.cassandra") \
-    .options(table="weather", keyspace="spark_streams") \
+    .options(table="historical_weather", keyspace="spark_streams") \
     .load()
 
 # Extract unique locations
@@ -38,16 +38,21 @@ weather_data_df = cassandra_df \
         "precip_mm", "precip_in", "snow_cm", "humidity", "cloud", "feelslike_c", "hour_uv"
     )
 
+
+
 # PostgreSQL connection properties
-url = "jdbc:postgresql://localhost:5432/your_database"
+url = "jdbc:postgresql://localhost:5432/weather"
 properties = {
-    "user": "your_username",
-    "password": "your_password",
+    "user": "airflow",
+    "password": "airflow",
     "driver": "org.postgresql.Driver"
 }
+# create schema
+def createSchemas():
+    return 0
 
 # Write DataFrames to PostgreSQL
 location_df.write.jdbc(url=url, table="Location", mode="append", properties=properties)
 date_df.write.jdbc(url=url, table="Date", mode="append", properties=properties)
 condition_df.write.jdbc(url=url, table="WeatherCondition", mode="append", properties=properties)
-weather_data_df.write.jdbc(url=url, table="WeatherData", mode="append", properties=properties)
+weather_data_df.write.jdbc(url=url, table="HistoricalWeatherData", mode="append", properties=properties)

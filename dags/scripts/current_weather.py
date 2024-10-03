@@ -1,8 +1,8 @@
-import findspark
-findspark.init()
+# import findspark
+# findspark.init()
 
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 import aiohttp
 import asyncio
 
@@ -11,7 +11,7 @@ import logging
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-load_dotenv()
+# load_dotenv()
 
 def data_filter(weather_data):
     location_data = {
@@ -52,7 +52,8 @@ def data_filter(weather_data):
 
 
 async def fetch_hist_data_async():
-    API_key = os.getenv('API_key')
+    # API_key = os.getenv('API_key')
+    API_key = '97f79db0d866429c807170012240906'
     cities = [
         {"name": "Hanoi", "lat": "21.0285", "lon": "105.8542"},
         {"name": "Da Nang", "lat": "16.0471", "lon": "108.2068"},
@@ -87,7 +88,7 @@ def realtime_weather():
     from kafka import KafkaProducer
     import json
 
-    # producer = KafkaProducer(bootstrap_servers=["broker:29092"], max_block_ms=5000)
+    producer = KafkaProducer(bootstrap_servers=["broker:29092"], max_block_ms=5000)
     try:
         weather_data = asyncio.run(fetch_hist_data_async())
         for data in weather_data:
@@ -95,7 +96,7 @@ def realtime_weather():
                 continue
             formatted_data = data_filter(data)
             print(json.dumps(formatted_data, indent=2))
-            # producer.send("current_weather", json.dumps(formatted_data).encode("utf-8"))
+            producer.send("current_weather", json.dumps(formatted_data).encode("utf-8"))
             logger.info(f"Weather data for {formatted_data['name']} written to Kafka")
 
     except Exception as e:

@@ -42,9 +42,9 @@ def data_filter(weather_data):
             "daily_chance_of_rain": forecast["day"]["daily_chance_of_rain"],
             "daily_will_it_snow": forecast["day"]["daily_will_it_snow"],
             "daily_chance_of_snow": forecast["day"]["daily_chance_of_snow"],
-            "condition_text": forecast["day"]["condition"]["text"],
-            "condition_icon": forecast["day"]["condition"]["icon"],
-            "condition_code": forecast["day"]["condition"]["code"],
+            # "condition_text": forecast["day"]["condition"]["text"],
+            # "condition_icon": forecast["day"]["condition"]["icon"],
+            # "condition_code": forecast["day"]["condition"]["code"],
             "uv": float(forecast["day"]["uv"])
         }
         for hour in forecast["hour"]:
