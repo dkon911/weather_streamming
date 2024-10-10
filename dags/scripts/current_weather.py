@@ -102,4 +102,4 @@ def realtime_weather():
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
-realtime_weather()
+# realtime_weather()
