@@ -21,7 +21,7 @@ default_args = {
     'timezone': 'Asia/Ho_Chi_Minh'
 }
 
-with DAG('weather_automation',
+with DAG('historical_weather_stream',
         default_args=default_args,
          schedule_interval='15 0 * * *',
         catchup=False) as dag:

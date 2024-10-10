@@ -123,7 +123,6 @@ def create_cassandra_connection():
     try:
         # connecting to the cassandra cluster
         cluster = Cluster(["localhost"])
-
         cas_session = cluster.connect()
 
         return cas_session
@@ -133,7 +132,7 @@ def create_cassandra_connection():
 
 
 def create_weather_df_from_kafka(spark_df):
-    # Define the schema matching the weather data structure
+
     weather_schema = StructType(
         [
             StructField("id", StringType(), False),
@@ -147,6 +146,7 @@ def create_weather_df_from_kafka(spark_df):
             StructField("localtime_epoch", LongType()),
             StructField("date", StringType()),
             StructField("date_epoch", LongType()),
+
             StructField("maxtemp_c", FloatType()),
             StructField("mintemp_c", FloatType()),
             StructField("avgtemp_c", FloatType()),
@@ -162,6 +162,7 @@ def create_weather_df_from_kafka(spark_df):
             StructField("condition_icon", StringType()),
             StructField("condition_code", IntegerType()),
             StructField("uv", FloatType()),
+
             StructField("time", StringType()),
             StructField("temp_c", FloatType()),
             StructField("is_day", IntegerType()),
