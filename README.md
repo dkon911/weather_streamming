@@ -1,10 +1,11 @@
-# Realtime Data Streaming
+# Real-Time Meteorological Data Processing and Forecasting Architecture
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [System Architecture](#system-architecture)
 - [Technologies](#technologies)
 - [Getting Started](#getting-started)
+- [Dashboard](#dashboard)
 - [Data Overview](#data-overview)
 
 ## Introduction
@@ -35,6 +36,8 @@ The project is designed with the following components:
 - Postgresql
 - Docker
 
+## Dashboard
+![weather monitor](images/dashboard_historical.png)
 
 ## Getting Started
 
