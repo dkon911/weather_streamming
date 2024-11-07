@@ -1,7 +1,6 @@
 __pycache__
 *.pyc
-
 .idea
 venv/
 .gitignore
-
+.env

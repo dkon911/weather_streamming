@@ -6,13 +6,12 @@ from scripts.historical_weather import historical_weather
 
 
 def fetch_historical_weather():
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=1)
+    get_date = datetime.now() - timedelta(days=1)
 
-    yesterday = start_date.strftime('%Y-%m-%d')
-    formatted_end_date = end_date.strftime('%Y-%m-%d')
+    yesterday = get_date.strftime('%Y-%m-%d')
 
     historical_weather(start_date=yesterday, end_date=yesterday)
+    # historical_weather(start_date='2024-10-24', end_date='2024-10-25')
 
 
 default_args = {
