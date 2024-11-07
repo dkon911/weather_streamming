@@ -11,7 +11,7 @@ def get_historical_weather():
     date = request.args.get('date')
 
     query = """
-        SELECT * FROM historical_weather_ 
+        SELECT * FROM historical_weather_
         WHERE 1=1
     """
 
@@ -64,12 +64,12 @@ def get_historical_weather():
             'pressure_mm': row[26],
             'pressure_in': row[27],
             'pressure_mb': row[28],
-            'temp_c': row[32],
-            'time': row[33],
-            'totalprecip_mm': row[34],
-            'uv': row[37],
-            'wind_degree': row[38],
-            'wind_kph': row[38],
+            'temp_c': row[29],  # Corrected index
+            'time': row[30],    # Corrected index
+            'totalprecip_mm': row[31],  # Corrected index
+            'uv': row[32],      # Corrected index
+            'wind_degree': row[33],  # Corrected index
+            'wind_kph': row[34],  # Corrected index
         })
 
     cur.close()
