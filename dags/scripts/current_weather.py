@@ -53,7 +53,7 @@ def data_filter(weather_data):
 
 async def fetch_hist_data_async():
     # API_key = os.getenv('API_key')
-    API_key = '97f79db0d866429c807170012240906'
+    API_key = '976479d06eb04d04bff132237242510'
     cities = [
         {"name": "Hanoi", "lat": "21.0285", "lon": "105.8542"},
         {"name": "Da Nang", "lat": "16.0471", "lon": "108.2068"},
@@ -95,7 +95,7 @@ def realtime_weather():
             if data is None:
                 continue
             formatted_data = data_filter(data)
-            print(json.dumps(formatted_data, indent=2))
+            # print(json.dumps(formatted_data, indent=2))
             producer.send("current_weather", json.dumps(formatted_data).encode("utf-8"))
             logger.info(f"Weather data for {formatted_data['name']} written to Kafka")
 

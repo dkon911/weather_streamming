@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
+
 from backend.config import get_postgres_connection
 
 historical_blueprint = Blueprint('historical', __name__)
 conn = get_postgres_connection()
+
 
 @historical_blueprint.route('/historical_weather', methods=['GET'])
 def get_historical_weather():
@@ -25,51 +27,51 @@ def get_historical_weather():
     if date:
         query += " AND date = %s"
         params.append(date)
-
+    query += "ORDER BY date, time ASC;"
     cur = conn.cursor()
     cur.execute(query, tuple(params))
     # print(params)
     # print(cur.query)
     rows = cur.fetchall()
-    print(rows)
+    # print(rows)
     historical_data = []
     for row in rows:
         historical_data.append({
-            'avghumidity': row[0],
-            'avgtemp_c': row[1],
-            'cloud': row[2],
+            'avghumidity': row[15],
+            'avgtemp_c': row[13],
+            'cloud': row[8],
             'condition_code': row[3],
             'condition_icon': row[4],
-            'condition_text': row[5],
-            'country': row[6],
-            'daily_chance_of_rain': row[7],
-            'daily_chance_of_snow': row[8],
-            'daily_will_it_rain': row[9],
-            'daily_will_it_snow': row[10],
-            'date': row[11],
-            'date_epoch': row[12],
-            'feelslike_c': row[13],
-            'hour_uv': row[14],
-            'humidity': row[15],
-            'is_day': row[16],
-            'lat': row[17],
+            'condition_text': row[7],
+            'country': row[0],
+            'daily_chance_of_rain': row[9],
+            'daily_chance_of_snow': row[10],
+            'daily_will_it_rain': row[11],
+            'daily_will_it_snow': row[12],
+            'date': row[2],
+            'date_epoch': row[28],
+            'feelslike_c': row[14],
+            'hour_uv': row[10],
+            'humidity': row[16],
+            'is_day': row[6],
+            'lat': row[4],
             'localtime': row[18],
             'localtime_epoch': row[19],
-            'lon': row[20],
-            'maxtemp_c': row[21],
-            'maxwind_kph': row[22],
-            'mintemp_c': row[23],
-            'name': row[24],
+            'lon': row[5],
+            'maxtemp_c': row[15],
+            'maxwind_kph': row[17],
+            'mintemp_c': row[16],
+            'name': row[1],
             'precip_in': row[25],
-            'pressure_mm': row[26],
-            'pressure_in': row[27],
-            'pressure_mb': row[28],
-            'temp_c': row[29],  # Corrected index
-            'time': row[30],    # Corrected index
-            'totalprecip_mm': row[31],  # Corrected index
-            'uv': row[32],      # Corrected index
-            'wind_degree': row[33],  # Corrected index
-            'wind_kph': row[34],  # Corrected index
+            'precip_mm': row[11],
+            'pressure_in': row[26],
+            'pressure_mb': row[27],
+            'temp_c': row[12],
+            'time': row[3],
+            'season': row[29],
+            'uv': row[9],
+            'wind_degree': row[20],
+            'wind_kph': row[18],
         })
 
     cur.close()
