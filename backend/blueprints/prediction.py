@@ -5,6 +5,7 @@ from backend.utils.cassandra_utils import get_yesterdays_weather_data
 
 prediction_blueprint = Blueprint('prediction', __name__)
 
+
 @prediction_blueprint.route('/predict_today', methods=['GET'])
 def predict_for_tomorrow():
     city = request.args.get('city')
@@ -14,7 +15,10 @@ def predict_for_tomorrow():
     if not yesterdays_data:
         return jsonify({"error": "No data available for prediction"}), 404
 
+    # Create DataFrame from yesterdays_data
     features = pd.DataFrame(yesterdays_data)
+
+    # Use the model to predict future weather
     predictions = model.predict(features)
 
     predictions_list = [
@@ -22,3 +26,5 @@ def predict_for_tomorrow():
         for pred in predictions
     ]
     return jsonify({'predictions': predictions_list})
+
+
