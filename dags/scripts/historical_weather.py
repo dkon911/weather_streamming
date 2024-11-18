@@ -85,7 +85,7 @@ def generate_date_range(start_date, end_date):
 
 async def fetch_hist_data_async(start_date: str, end_date: str):
     # API_key = os.getenv('API_key')
-    API_key = '97f79db0d866429c807170012240906'
+    API_key = '976479d06eb04d04bff132237242510'
     # start_date = '2024-07-09'
     # end_date = '2024-07-11'
     cities = [

@@ -21,7 +21,7 @@ def fetch_historical_weather():
     historical_weather(start_date=yesterday, end_date=yesterday)
 
 
-load_cassandra_command = 'spark-submit --master spark://spark-master:7077 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1 load_to_DW.py'
+load_cassandra_command = 'spark-submit --master spark://spark-master:7077 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,org.postgresql:postgresql:42.7.4 load_to_DW.py'
 
 # Define the DAG
 with DAG('historical_weather_stream',
