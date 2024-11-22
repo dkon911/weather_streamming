@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import pandas as pd
 from backend.models.model import model
-from backend.utils.cassandra_utils import get_yesterdays_weather_data
+from backend.utils.postgres_utils import get_yesterdays_weather_data
 
 prediction_blueprint = Blueprint('prediction', __name__)
 
