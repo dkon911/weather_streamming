@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from backend.config import get_postgres_connection
-from backend.utils.cassandra_utils import calculate_time_diff
+from backend.utils.postgres_utils import calculate_time_diff
 
 weather_blueprint = Blueprint('weather', __name__)
 conn = get_postgres_connection()
@@ -10,9 +10,9 @@ def get_weather():
     city = request.args.get('city')
     country = request.args.get('country')
 
-    query = """
+    query = f"""
         SELECT * FROM current_weather 
-        WHERE last_updated = (SELECT max(last_updated) FROM current_weather) 
+        WHERE last_updated = (SELECT max(last_updated) FROM current_weather WHERE name like '{city}') 
         AND 1=1
     """
 
