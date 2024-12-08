@@ -5,7 +5,7 @@
 # import os
 import aiohttp
 import asyncio
-
+import time
 import logging
 
 # Set up logging
@@ -90,6 +90,7 @@ def realtime_weather():
 
     producer = KafkaProducer(bootstrap_servers=["broker:29092"], max_block_ms=5000)
     try:
+        # time.sleep(60)
         weather_data = asyncio.run(fetch_hist_data_async())
         for data in weather_data:
             if data is None:

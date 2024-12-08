@@ -28,6 +28,7 @@ def get_yesterdays_weather_data(city, country):
      """
     # Execute the query
     cursor.execute(query, (city, country, start_of_yesterday_str, end_of_yesterday_str))
+    # cursor.execute(query, (city, country, '2024-11-27 00:00', '2024-11-27 23:59'))
 
     # Fetch all the rows returned by the query
     rows = cursor.fetchall()

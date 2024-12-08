@@ -1,3 +1,4 @@
+import time
 from datetime import date, timedelta
 
 from pyspark.sql import SparkSession
@@ -5,10 +6,11 @@ from pyspark.sql.functions import col, udf, lag, hour, dayofweek, month, to_date
 from pyspark.sql.types import StringType
 from pyspark.sql.window import Window
 
+start_time = time.time()
 spark = (SparkSession.builder
     .appName("load_to_DW")
     .config("spark.jars.packages", "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1")
-    .config("spark.cassandra.connection.host", "cassandra")
+    .config("spark.cassandra.connection.host", "localhost")
     .config("spark.jars", r"C:\Spark\spark-3.4.3-bin-hadoop3\jars\myJar\postgresql-42.7.4.jar")
     .getOrCreate())
 
@@ -22,7 +24,7 @@ df = (spark.read
     )
 
 # Define the JDBC URL and properties
-url = "jdbc:postgresql://postgres:5432/airflow"
+url = "jdbc:postgresql://localhost:5432/airflow"
 properties = {
     "user": "airflow",
     "password": "airflow",
@@ -72,3 +74,5 @@ df = df.select( "country","name", "date", "time", "lat", "lon", "is_day",
                 "pressure_mb_lag_1", "hour", "month", "season")
 
 df.write.jdbc(url=url, table="historical_weather_", mode="append", properties=properties)
+end_time = time.time()
+print(f"Execution time: {end_time - start_time}")
