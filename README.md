@@ -59,13 +59,13 @@ The project is designed with the following components:
       docker exec -it <spark-master container id>\
       spark-submit --master spark://<spark master IP address>:7077 \
       --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,\
-      org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 spark_stream.py
+      org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 historical_stream.py
     ```
 
     or if already have spark in machine use:
 
     ```bash
-    python spark_stream.py
+    python historical_stream.py
     ```
 
   ## Data Overview
